@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank
 
 /**
  * @author Mompati 'Patco' Keetile
- * @since 06-12-2022 @ 13:54
+ * @created 06-12-2022 @ 13:54
  *
  */
 @Data

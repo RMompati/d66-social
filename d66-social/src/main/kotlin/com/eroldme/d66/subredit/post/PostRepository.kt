@@ -1,10 +1,11 @@
 package com.eroldme.d66.subredit.post
 
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
 /**
  * @author Mompati 'Patco' Keetile
- * @since 06-12-2022 @ 13:57
- *
- *
+ * @created 06-12-2022 @ 13:57
  */
-class PostRepository {
-}
+@Repository
+interface PostRepository : JpaRepository<Post, Long>

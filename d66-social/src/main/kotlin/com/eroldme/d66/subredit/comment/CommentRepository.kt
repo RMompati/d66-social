@@ -1,10 +1,11 @@
 package com.eroldme.d66.subredit.comment
 
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
 /**
  * @author Mompati 'Patco' Keetile
- * @since 06-12-2022 @ 13:58
- *
- *
+ * @created 06-12-2022 @ 13:58
  */
-class CommentRepository {
-}
+@Repository
+interface CommentRepository : JpaRepository<Comment, Long>

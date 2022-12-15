@@ -12,7 +12,7 @@ import javax.persistence.FetchType.LAZY
 
 /**
  * @author Mompati 'Patco' Keetile
- * @since 06-12-2022 @ 14:10
+ * @created 06-12-2022 @ 14:10
  *
  *
  */

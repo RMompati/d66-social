@@ -1,10 +1,11 @@
 package com.eroldme.d66.subredit.subredit
 
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
 /**
  * @author Mompati 'Patco' Keetile
- * @since 06-12-2022 @ 14:13
- *
- *
+ * @created 06-12-2022 @ 14:13
  */
-class SubredditRepository {
-}
+@Repository
+interface SubredditRepository : JpaRepository<Subreddit, Long>

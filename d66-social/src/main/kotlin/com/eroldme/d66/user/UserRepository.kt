@@ -1,8 +1,11 @@
 package com.eroldme.d66.user;
 
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+
 /**
  * @author Mompati 'Patco' Keetile
- * @since 06-12-2022 @ 13:54
+ * @created 06-12-2022 @ 13:54
  */
-public class UserRepository {
-}
+@Repository
+interface UserRepository : JpaRepository<User, Long>
