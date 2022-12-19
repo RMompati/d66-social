@@ -22,8 +22,8 @@ import javax.validation.constraints.NotBlank
 @NoArgsConstructor
 class Subreddit(
     @Id
-    @SequenceGenerator(name = "subreddit_id", sequenceName = "post_id", allocationSize = 1)
-    @GeneratedValue(generator = "subreddit_id", strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "subreddit_id_seq", sequenceName = "subreddit_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "subreddit_id_seq", strategy = GenerationType.IDENTITY)
     private val id: Long,
     @NotBlank(message = "Community name is required.")
     private val name: String,

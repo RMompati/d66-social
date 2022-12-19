@@ -1,7 +1,7 @@
 package com.eroldme.d66.subredit.post
 
 import com.eroldme.d66.subredit.subredit.Subreddit
-import com.eroldme.d66.user.User
+import com.eroldme.d66.user.ApplicationUser
 import lombok.AllArgsConstructor
 import lombok.Builder
 import lombok.Data
@@ -24,8 +24,8 @@ import javax.validation.constraints.NotBlank
 @NoArgsConstructor
 class Post(
     @Id
-    @SequenceGenerator(name = "post_id", sequenceName = "post_id", allocationSize = 1)
-    @GeneratedValue(generator = "post_id", strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "post_id_seq", sequenceName = "post_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "post_id_seq", strategy = GenerationType.IDENTITY)
     private val postId: Long,
     @NotBlank(message = "Post Name cannot be empty or Null.")
     private val postName: String,
@@ -37,7 +37,7 @@ class Post(
     private val voteCount: Int,
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId", referencedColumnName  = "userId")
-    private val user: User,
+    private val applicationUser: ApplicationUser,
     private val createdDate: Instant,
     @ManyToOne(fetch = LAZY) @JoinColumn(name ="id", referencedColumnName = "id")
     private val subreddit: Subreddit

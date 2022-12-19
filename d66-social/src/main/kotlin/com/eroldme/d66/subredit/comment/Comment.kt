@@ -1,7 +1,7 @@
 package com.eroldme.d66.subredit.comment
 
 import com.eroldme.d66.subredit.post.Post
-import com.eroldme.d66.user.User
+import com.eroldme.d66.user.ApplicationUser
 import lombok.AllArgsConstructor
 import lombok.Builder
 import lombok.Data
@@ -22,8 +22,8 @@ import javax.validation.constraints.NotEmpty
 @NoArgsConstructor
 class Comment(
     @Id
-    @SequenceGenerator(name = "comment_id", sequenceName = "post_id", allocationSize = 1)
-    @GeneratedValue(generator = "comment_id", strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "comment_id_seq", sequenceName = "comment_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "comment_id_seq", strategy = GenerationType.IDENTITY)
     private val id: Long,
     @NotEmpty
     private val text: String,
@@ -33,5 +33,5 @@ class Comment(
     private val createdDate: Instant,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private val user: User
+    private val applicationUser: ApplicationUser
 )

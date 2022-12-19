@@ -1,6 +1,6 @@
 package com.eroldme.d66.user.register.token
 
-import com.eroldme.d66.user.User
+import com.eroldme.d66.user.ApplicationUser
 import lombok.AllArgsConstructor
 import lombok.Builder
 import lombok.Data
@@ -23,11 +23,11 @@ import javax.persistence.FetchType.LAZY
 @Table(name = "token")
 class VerificationToken(
     @Id
-    @SequenceGenerator(name = "token_id", sequenceName = "post_id", allocationSize = 1)
-    @GeneratedValue(generator = "token_id", strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "token_id_seq", sequenceName = "token_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "token_id_seq", strategy = GenerationType.IDENTITY)
     private val id: Long,
     private val token: String,
-    @OneToMany(fetch = LAZY)
-    private val user: User,
+    @ManyToOne(fetch = LAZY)
+    private val applicationUser: ApplicationUser,
     private val expiryDate: Instant
 )

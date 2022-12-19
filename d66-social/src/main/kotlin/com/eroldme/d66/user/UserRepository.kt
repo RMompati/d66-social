@@ -8,4 +8,4 @@ import org.springframework.stereotype.Repository
  * @created 06-12-2022 @ 13:54
  */
 @Repository
-interface UserRepository : JpaRepository<User, Long>
+interface UserRepository : JpaRepository<ApplicationUser, Long>

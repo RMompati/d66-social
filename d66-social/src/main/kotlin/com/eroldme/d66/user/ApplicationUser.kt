@@ -19,10 +19,10 @@ import javax.validation.constraints.NotBlank
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-class User(
+class ApplicationUser(
     @Id
-    @SequenceGenerator(name = "user_id", sequenceName = "post_id", allocationSize = 1)
-    @GeneratedValue(generator = "user_id", strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "user_id_seq", strategy = GenerationType.IDENTITY)
     private val userId: Long,
     @NotBlank(message = "Username is required")
     private val username: String,

@@ -2,7 +2,7 @@ package com.eroldme.d66.subredit.vote
 
 import com.eroldme.d66.subredit.post.Post
 import com.eroldme.d66.subredit.vote.constant.VoteType
-import com.eroldme.d66.user.User
+import com.eroldme.d66.user.ApplicationUser
 import lombok.AllArgsConstructor
 import lombok.Builder
 import lombok.Data
@@ -23,8 +23,8 @@ import javax.persistence.FetchType.LAZY
 @NoArgsConstructor
 class Vote(
     @Id
-    @SequenceGenerator(name = "vote_id", sequenceName = "post_id", allocationSize = 1)
-    @GeneratedValue(generator = "vote_id", strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "vote_id_seq", sequenceName = "vote_id_seq", allocationSize = 1)
+    @GeneratedValue(generator = "vote_id_seq", strategy = GenerationType.IDENTITY)
     private val voteId: Long,
     private val voteType: VoteType,
     @ManyToOne(fetch = LAZY)
@@ -32,5 +32,5 @@ class Vote(
     private val post: Post,
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private val user: User
+    private val applicationUser: ApplicationUser
 )
