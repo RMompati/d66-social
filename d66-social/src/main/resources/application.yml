@@ -17,3 +17,7 @@ spring:
   sql:
     init:
       mode: ALWAYS
+mc:
+  smtp:
+    username: mompati.keetile@gmail.com
+    password: mpzhlyizcownotme
