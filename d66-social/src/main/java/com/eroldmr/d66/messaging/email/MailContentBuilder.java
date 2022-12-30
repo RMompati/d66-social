@@ -1,4 +1,4 @@
-package com.eroldmr.d66.service;
+package com.eroldmr.d66.messaging.email;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,9 +14,10 @@ import org.thymeleaf.context.Context;
 public class MailContentBuilder {
   private final TemplateEngine templateEngine;
 
-  String build(String message) {
+  public String build(String name, String link) {
     Context context = new Context();
-    context.setVariable("message", message);
+    context.setVariable("name", name);
+    context.setVariable("link", link);
     return templateEngine.process("mailTemplate", context);
   }
 }
