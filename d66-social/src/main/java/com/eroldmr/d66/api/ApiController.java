@@ -1,15 +1,10 @@
-package com.eroldmr.d66.controller;
+package com.eroldmr.d66.api;
 
 import com.eroldmr.d66.appuser.register.dto.RegisterRequest;
-import com.eroldmr.d66.service.AuthService;
 import com.eroldmr.d66.utils.D66Response;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -20,16 +15,30 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class AuthController {
+public class ApiController {
 
-  private final AuthService authService;
+  private final ApiService apiService;
 
   @PostMapping("/singup")
   public ResponseEntity<D66Response> registerUser(@RequestBody RegisterRequest registerRequest) {
-    authService.registerUser(registerRequest);
+    apiService.registerUser(registerRequest);
     return ResponseEntity.ok(
         D66Response.respond()
             .message("User Registration Successful")
+            .status(OK)
+            .statusCode(OK.value())
+            .build()
+    );
+  }
+
+  @GetMapping(value = "activate-account/{token}")
+  public ResponseEntity<D66Response> activateAccount(@PathVariable String token) {
+    String status = apiService.activateUserAccount(token).equals("success") ?
+        "Account Activated Successful" :
+        "Account Activation unsuccessful. An new activation link has been sent.";
+    return ResponseEntity.ok(
+        D66Response.respond()
+            .message(status)
             .status(OK)
             .statusCode(OK.value())
             .build()

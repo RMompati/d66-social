@@ -6,6 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * @author Mompati 'Patco' Keetile
@@ -25,6 +26,6 @@ public class AppUser {
   @Email
   @NotBlank(message = "Email is required.")
   private String email;
-  private Instant createdAt;
+  private LocalDateTime createdAt;
   private Boolean enabled;
 }

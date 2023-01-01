@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -24,5 +25,5 @@ public class VerificationToken {
   private String token;
   @ManyToOne(fetch = LAZY)
   private AppUser appUser;
-  private Instant expiresAt;
+  private LocalDateTime expiresAt;
 }
