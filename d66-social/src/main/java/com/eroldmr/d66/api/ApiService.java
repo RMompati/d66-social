@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static com.eroldmr.d66.utils.Utils.stringToken;
 import static java.time.LocalDateTime.now;
@@ -39,16 +40,18 @@ public class ApiService {
   public void registerUser(RegisterRequest registerRequest) {
     log.info("Saving new user.");
 
-    AppUser appUser = appUserRepository.save(
-            AppUser
-                    .NewUser()
-                      .username(registerRequest.getUsername())
-                      .email(registerRequest.getEmail())
-                      .password(passwordEncoder.encode(registerRequest.getPassword()))
-                      .createdAt(now())
-                      .enabled(false)
-                    .build()
-    );
+    AppUser appUser1 = AppUser
+        .NewUser()
+          .username(registerRequest.getUsername())
+          .email(registerRequest.getEmail())
+          .password(passwordEncoder.encode(registerRequest.getPassword()))
+          .createdAt(now())
+          .enabled(false)
+        .build();
+
+    userExists(appUser1);
+
+    AppUser appUser = appUserRepository.save(appUser1);
 
     log.info("Generating user verification token.");
 
@@ -67,29 +70,54 @@ public class ApiService {
   }
 
   @Transactional
-  public String activateUserAccount(String token) {
+  public void activateUserAccount(String token) {
     log.info("Activating user account.");
     VerificationToken vToken = verificationTokenRepository.findByToken(token)
         .orElseThrow(() -> new D66SocialException("Invalid token."));
 
-    return enableUserAccount(vToken);
+    enableUserAccount(vToken);
   }
 
-  @Transactional
-  private String enableUserAccount(VerificationToken vToken) {
+  @Transactional(noRollbackFor = {D66SocialException.class})
+  private void enableUserAccount(VerificationToken vToken) {
     log.info("Account activation in progress.");
-    log.info("Token expired ? " + vToken.getExpiresAt().isBefore(now()));
-    if (now().isBefore(vToken.getExpiresAt())) {
-      appUserRepository.enableUserByEmail(vToken.getAppUser().getEmail());
-      log.info("Account activation successful.");
-      return "success";
+
+    AppUser appUser = vToken.getAppUser();
+
+    accountEnabled(appUser);
+
+    if (!now().isBefore(vToken.getExpiresAt())) {
+      log.info("Account activation unsuccessful.");
+
+      generateVerificationToken(appUser);
+      verificationTokenRepository.delete(vToken);
+
+      throw new D66SocialException("Account Activation unsuccessful. A new activation link has been sent.");
     }
 
-    log.info("Account activation unsuccessful.");
+    appUserRepository.enableUserByEmail(appUser.getEmail());
+    log.info("Account activation successful.");
+  }
 
-    generateVerificationToken(vToken.getAppUser());
-    verificationTokenRepository.delete(vToken);
-    return "failure";
+  private void accountEnabled(AppUser appUser) {
+    log.info("Checking if account is already enabled.");
+    if (appUser.getEnabled()) {
+      throw new D66SocialException("Account already activated, please proceed to login.");
+    }
+  }
+
+  private void userExists(AppUser appUser) {
+    log.info("Checking if the user details exists.");
+    Optional<AppUser> user = appUserRepository.findByEmail(appUser.getEmail());
+    boolean exists = user.isPresent();
+    boolean enabled = exists && user.get().getEnabled();
+
+    if (enabled) {
+      throw new D66SocialException("Email is taken, please proceed to login or use a different email.");
+    } else if (exists) {
+      throw new D66SocialException("Email is taken and account Activation link has been sent  or use a different email.");
+    }
+
   }
 
   @Transactional

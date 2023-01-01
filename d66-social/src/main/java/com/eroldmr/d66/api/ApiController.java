@@ -33,12 +33,11 @@ public class ApiController {
 
   @GetMapping(value = "activate-account/{token}")
   public ResponseEntity<D66Response> activateAccount(@PathVariable String token) {
-    String status = apiService.activateUserAccount(token).equals("success") ?
-        "Account Activated Successful" :
-        "Account Activation unsuccessful. An new activation link has been sent.";
+    apiService.activateUserAccount(token);
+
     return ResponseEntity.ok(
         D66Response.respond()
-            .message(status)
+            .message( "Account Activated Successfully.")
             .status(OK)
             .statusCode(OK.value())
             .build()

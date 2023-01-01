@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 /**
  * @author Mompati 'Patco' Keetile
@@ -13,6 +14,8 @@ import javax.transaction.Transactional;
  */
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+
+  Optional<AppUser> findByEmail(String email);
 
   @Transactional
   @Modifying(clearAutomatically = true)
