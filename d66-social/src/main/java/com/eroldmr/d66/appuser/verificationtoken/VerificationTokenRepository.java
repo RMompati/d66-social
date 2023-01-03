@@ -1,4 +1,4 @@
-package com.eroldmr.d66.appuser.register.verificationtoken;
+package com.eroldmr.d66.appuser.verificationtoken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package com.eroldmr.d66.appuser.register.verificationtoken;
+package com.eroldmr.d66.appuser.verificationtoken;
 
 import com.eroldmr.d66.appuser.AppUser;
 import lombok.*;

@@ -2,8 +2,8 @@ package com.eroldmr.d66.appuser;
 
 import com.eroldmr.common.configs.smtp.SMTPEmailInfo;
 import com.eroldmr.common.configs.smtp.SMTPEmailService;
-import com.eroldmr.d66.appuser.register.verificationtoken.VerificationToken;
-import com.eroldmr.d66.appuser.register.verificationtoken.VerificationTokenRepository;
+import com.eroldmr.d66.appuser.verificationtoken.VerificationToken;
+import com.eroldmr.d66.appuser.verificationtoken.VerificationTokenRepository;
 import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.messaging.email.MailContentBuilder;
 import lombok.RequiredArgsConstructor;

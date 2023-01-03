@@ -1,4 +1,4 @@
-package com.eroldmr.d66.appuser.register.dto;
+package com.eroldmr.d66.appuser.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

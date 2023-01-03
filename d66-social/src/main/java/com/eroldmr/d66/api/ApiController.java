@@ -1,8 +1,10 @@
 package com.eroldmr.d66.api;
 
-import com.eroldmr.d66.appuser.register.dto.RegisterRequest;
+import com.eroldmr.d66.appuser.dto.LoginRequest;
+import com.eroldmr.d66.appuser.dto.RegisterRequest;
 import com.eroldmr.d66.utils.D66Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,11 +25,12 @@ public class ApiController {
   public ResponseEntity<D66Response> registerUser(@RequestBody RegisterRequest registerRequest) {
     apiService.registerUser(registerRequest);
     return ResponseEntity.ok(
-        D66Response.respond()
-            .message("User Registration Successful")
-            .status(OK)
-            .statusCode(OK.value())
-            .build()
+        D66Response
+                .respond()
+                  .statusCode(OK.value())
+                  .status(OK)
+                  .message("User Registration Successful")
+                .build()
     );
   }
 
@@ -36,11 +39,17 @@ public class ApiController {
     apiService.activateUserAccount(token);
 
     return ResponseEntity.ok(
-        D66Response.respond()
-            .message( "Account Activated Successfully.")
-            .status(OK)
-            .statusCode(OK.value())
-            .build()
+        D66Response
+                .respond()
+                  .statusCode(OK.value())
+                  .status(OK)
+                  .message( "Account Activated Successfully.")
+                .build()
     );
+  }
+
+  @PostMapping("/login")
+  public ResponseEntity<D66Response> login(@RequestBody LoginRequest loginRequest) {
+    return ResponseEntity.ok(apiService.login(loginRequest));
   }
 }

@@ -19,9 +19,9 @@ public class D66SocialExceptionAdvice {
     return ResponseEntity.ok(
         D66Response
             .respond()
-            .message(d66SocialException.getMessage())
-            .statusCode(BAD_REQUEST.value())
-            .status(BAD_REQUEST)
+                .statusCode(d66SocialException.getStatus().value())
+                .status(d66SocialException.getStatus())
+                .message(d66SocialException.getMessage())
             .build()
     );
   }

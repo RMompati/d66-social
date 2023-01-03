@@ -2,13 +2,24 @@ package com.eroldmr.d66.api;
 
 import com.eroldmr.d66.appuser.AppUser;
 import com.eroldmr.d66.appuser.AppUserService;
-import com.eroldmr.d66.appuser.register.dto.RegisterRequest;
+import com.eroldmr.d66.appuser.dto.LoginRequest;
+import com.eroldmr.d66.appuser.dto.RegisterRequest;
+import com.eroldmr.d66.exception.D66SocialException;
+import com.eroldmr.d66.security.JwtProvider;
+import com.eroldmr.d66.utils.D66Response;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static java.time.LocalDateTime.now;
+import static java.util.Map.of;
+import static org.springframework.http.HttpStatus.OK;
 
 /**
  * @author Mompati 'Patco' Keetile
@@ -20,6 +31,9 @@ public class ApiService {
 
   private final AppUserService appUserService;
   private final PasswordEncoder passwordEncoder;
+  private final AuthenticationManager authenticationManager;
+
+  private final JwtProvider jwtProvider;
 
   @Transactional
   public void registerUser(RegisterRequest registerRequest) {
@@ -40,5 +54,31 @@ public class ApiService {
   @Transactional
   public void activateUserAccount(String token) {
     appUserService.activateUserAccount(token);
+  }
+
+  public D66Response login(LoginRequest loginRequest) {
+    Authentication authenticate;
+
+    try {
+      authenticate = authenticationManager.authenticate(
+              new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+      );
+    } catch (AuthenticationException exc) {
+      throw new D66SocialException("User authentication failed.");
+    }
+
+    SecurityContextHolder.getContext().setAuthentication(authenticate);
+    String jwToken = jwtProvider.generateJWToken(authenticate);
+
+    return D66Response
+            .respond()
+            .statusCode(OK.value())
+            .status(OK)
+            .message("Login successful.")
+            .data(of(
+                    "auth", jwToken,
+                    "username", loginRequest.getUsername()
+            ))
+            .build();
   }
 }
