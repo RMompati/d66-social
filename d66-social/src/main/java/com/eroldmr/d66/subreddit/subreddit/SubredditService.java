@@ -1,5 +1,6 @@
 package com.eroldmr.d66.subreddit.subreddit;
 
+import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.subreddit.subreddit.dto.SubredditDto;
 import com.eroldmr.d66.utils.D66Response;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +11,11 @@ import javax.transaction.Transactional;
 
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static java.util.Collections.emptyList;
 import static java.util.Map.of;
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 /**
  * @author Mompati 'Patco' Keetile
@@ -41,7 +42,7 @@ public class SubredditService {
   }
 
   @Transactional
-  public D66Response getAll() {
+  public D66Response getAllSubreddits() {
     return D66Response
             .respond()
             .statusCode(OK.value())
@@ -55,6 +56,20 @@ public class SubredditService {
                             .map(this::mapToDto)
                             .collect(Collectors.toList())
             ))
+            .build();
+  }
+
+  @Transactional
+  public D66Response getSubreddit(Long id) {
+    Subreddit subreddit = subredditRepository.findById(id).orElseThrow(
+            () -> new D66SocialException(format("Subreddit with id(%d) not found.", id), NOT_FOUND)
+    );
+    return D66Response
+            .respond()
+            .statusCode(OK.value())
+            .status(OK)
+            .message("Subreddit fetched.")
+            .data(of("subreddit", mapToDto(subreddit)))
             .build();
   }
 

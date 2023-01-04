@@ -1,12 +1,9 @@
 package com.eroldmr.d66.exception;
 
 import com.eroldmr.d66.utils.D66Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 /**
  * @author Mompati 'Patco' Keetile

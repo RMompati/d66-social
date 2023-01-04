@@ -26,7 +26,11 @@ public class SubredditController {
 
   @GetMapping
   public ResponseEntity<D66Response> getSubreddits() {
-    return ResponseEntity.ok(subredditService.getAll());
+    return ResponseEntity.ok(subredditService.getAllSubreddits());
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<D66Response> getSubreddit(@PathVariable Long id) {
+    return ResponseEntity.ok(subredditService.getSubreddit(id));
+  }
 }

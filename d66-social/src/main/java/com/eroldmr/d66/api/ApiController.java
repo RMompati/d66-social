@@ -4,7 +4,6 @@ import com.eroldmr.d66.appuser.dto.LoginRequest;
 import com.eroldmr.d66.appuser.dto.RegisterRequest;
 import com.eroldmr.d66.utils.D66Response;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ public class ApiController {
 
   private final ApiService apiService;
 
-  @PostMapping("/singup")
+  @PostMapping("/signup")
   public ResponseEntity<D66Response> registerUser(@RequestBody RegisterRequest registerRequest) {
     apiService.registerUser(registerRequest);
     return ResponseEntity.ok(
@@ -43,7 +42,7 @@ public class ApiController {
                 .respond()
                   .statusCode(OK.value())
                   .status(OK)
-                  .message( "Account Activated Successfully.")
+                  .message("Account Activated Successfully.")
                 .build()
     );
   }
