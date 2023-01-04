@@ -6,7 +6,7 @@ import com.eroldmr.d66.appuser.dto.LoginRequest;
 import com.eroldmr.d66.appuser.dto.RegisterRequest;
 import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.security.JwtProvider;
-import com.eroldmr.d66.utils.D66Response;
+import com.eroldmr.d66.response.D66Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

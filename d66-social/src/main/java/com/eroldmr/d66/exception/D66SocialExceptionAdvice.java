@@ -1,6 +1,6 @@
 package com.eroldmr.d66.exception;
 
-import com.eroldmr.d66.utils.D66Response;
+import com.eroldmr.d66.response.D66Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

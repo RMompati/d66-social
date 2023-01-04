@@ -1,4 +1,4 @@
-package com.eroldmr.d66.utils;
+package com.eroldmr.d66.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

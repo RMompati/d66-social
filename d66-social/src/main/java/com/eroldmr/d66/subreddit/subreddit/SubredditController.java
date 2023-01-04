@@ -1,7 +1,7 @@
 package com.eroldmr.d66.subreddit.subreddit;
 
 import com.eroldmr.d66.subreddit.subreddit.dto.SubredditDto;
-import com.eroldmr.d66.utils.D66Response;
+import com.eroldmr.d66.response.D66Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

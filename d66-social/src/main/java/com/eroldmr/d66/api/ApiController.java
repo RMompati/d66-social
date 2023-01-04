@@ -2,7 +2,7 @@ package com.eroldmr.d66.api;
 
 import com.eroldmr.d66.appuser.dto.LoginRequest;
 import com.eroldmr.d66.appuser.dto.RegisterRequest;
-import com.eroldmr.d66.utils.D66Response;
+import com.eroldmr.d66.response.D66Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
