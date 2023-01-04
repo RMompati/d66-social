@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 /**
  * @author Mompati 'Patco' Keetile
@@ -64,7 +65,7 @@ public class ApiService {
               new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
       );
     } catch (AuthenticationException exc) {
-      throw new D66SocialException("User authentication failed.");
+      throw new D66SocialException("User authentication failed.", UNAUTHORIZED);
     }
 
     SecurityContextHolder.getContext().setAuthentication(authenticate);

@@ -1,11 +1,13 @@
 package com.eroldmr.d66.config;
 
 import com.eroldmr.d66.appuser.AppUserService;
+import com.eroldmr.d66.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
 
@@ -29,20 +32,24 @@ public class SecurityConfig {
 
   private final PasswordEncoder passwordEncoder;
   private final AppUserService appUserService;
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
   @Bean
   @SneakyThrows(Exception.class)
   public SecurityFilterChain securityFilterChain(HttpSecurity http) {
-    http
-        .csrf().disable()
-        .authorizeRequests()
-        .antMatchers("/api/auth/**")
-        .permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .authenticationProvider(daoAuthenticationProvider());
-    return http.build();
+    return http
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/api/auth/**")
+            .permitAll()
+            .antMatchers(HttpMethod.GET, "/api/subreddit")
+            .permitAll()
+            .anyRequest()
+            .authenticated()
+            .and()
+            .authenticationProvider(daoAuthenticationProvider())
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
   }
 
   @Bean

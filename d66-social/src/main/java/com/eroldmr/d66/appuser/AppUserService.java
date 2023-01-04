@@ -8,6 +8,7 @@ import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.messaging.email.MailContentBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,6 +21,7 @@ import java.util.Optional;
 import static com.eroldmr.d66.utils.Utils.stringToken;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
+import static org.springframework.http.HttpStatus.ALREADY_REPORTED;
 
 /**
  * @author Mompati 'Patco' Keetile
@@ -100,7 +102,7 @@ public class AppUserService implements UserDetailsService {
   private void accountEnabled(AppUser appUser) {
     log.info("Checking if account is already enabled.");
     if (appUser.getEnabled()) {
-      throw new D66SocialException("Account already activated, please proceed to login.");
+      throw new D66SocialException("Account already activated, please proceed to login.", ALREADY_REPORTED);
     }
   }
 

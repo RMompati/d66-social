@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(builderMethodName = "NewSubreddit")
 @Entity
 public class Subreddit {
   @Id
@@ -33,7 +33,7 @@ public class Subreddit {
   private String description;
   @OneToMany(fetch = LAZY)
   private List<Post> posts;
-  private Instant createOn;
+  private LocalDateTime createdOn;
   @ManyToOne(fetch = LAZY)
   private AppUser appUser;
 }
