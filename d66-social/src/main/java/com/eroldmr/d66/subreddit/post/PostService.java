@@ -36,6 +36,10 @@ public class PostService {
 
   @Transactional
   public D66Response save(PostDto postDto) {
+    Post post = postRepository.save(mapToPost(postDto));
+    post.getSubreddit().getPosts().add(post);
+    subredditRepository.save(post.getSubreddit());
+
     return D66Response
             .respond()
             .timestamp(now())
@@ -43,7 +47,7 @@ public class PostService {
             .status(CREATED)
             .message(format("Post created under subreddit '%s'", postDto.getSubredditName()))
             .username(authenticatedUserService.getUsername())
-            .data(of("post", mapToDto(postRepository.save(mapToPost(postDto)))))
+            .data(of("post", mapToDto(post)))
             .build();
   }
 

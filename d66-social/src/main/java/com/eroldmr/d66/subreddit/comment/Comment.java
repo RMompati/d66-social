@@ -17,7 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(builderMethodName = "NewComment")
 @Entity
 public class Comment {
   @Id
