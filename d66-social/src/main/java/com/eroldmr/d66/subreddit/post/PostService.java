@@ -74,12 +74,12 @@ public class PostService {
 
     return D66Response
             .respond()
-              .timestamp(now())
-              .statusCode(OK.value())
-              .status(OK)
-              .message("Post fetched by id")
-              .username(authenticatedUserService.getUsername())
-              .data(of("post", mapToDto(post)))
+            .timestamp(now())
+            .statusCode(OK.value())
+            .status(OK)
+            .message("Post fetched by id")
+            .username(authenticatedUserService.getUsername())
+            .data(of("post", mapToDto(post)))
             .build();
   }
 
