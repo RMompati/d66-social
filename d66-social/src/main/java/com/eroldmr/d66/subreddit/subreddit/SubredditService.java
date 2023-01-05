@@ -1,14 +1,13 @@
 package com.eroldmr.d66.subreddit.subreddit;
 
 import com.eroldmr.d66.exception.D66SocialException;
-import com.eroldmr.d66.subreddit.subreddit.dto.SubredditDto;
 import com.eroldmr.d66.response.D66Response;
+import com.eroldmr.d66.subreddit.subreddit.dto.SubredditDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -32,6 +31,7 @@ public class SubredditService {
   public D66Response save(SubredditDto subredditDto) {
     return D66Response
             .respond()
+            .timestamp(now())
             .statusCode(CREATED.value())
             .status(CREATED)
             .message("Subreddit created successfully.")
@@ -45,6 +45,7 @@ public class SubredditService {
   public D66Response getAllSubreddits() {
     return D66Response
             .respond()
+            .timestamp(now())
             .statusCode(OK.value())
             .status(OK)
             .message("Subreddits fetched.")
@@ -66,6 +67,7 @@ public class SubredditService {
     );
     return D66Response
             .respond()
+            .timestamp(now())
             .statusCode(OK.value())
             .status(OK)
             .message("Subreddit fetched.")

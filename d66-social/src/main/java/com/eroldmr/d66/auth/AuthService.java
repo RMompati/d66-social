@@ -1,12 +1,12 @@
-package com.eroldmr.d66.api;
+package com.eroldmr.d66.auth;
 
 import com.eroldmr.d66.appuser.AppUser;
 import com.eroldmr.d66.appuser.AppUserService;
 import com.eroldmr.d66.appuser.dto.LoginRequest;
 import com.eroldmr.d66.appuser.dto.RegisterRequest;
 import com.eroldmr.d66.exception.D66SocialException;
-import com.eroldmr.d66.security.JwtProvider;
 import com.eroldmr.d66.response.D66Response;
+import com.eroldmr.d66.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,7 +28,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
  */
 @Service
 @RequiredArgsConstructor
-public class ApiService {
+public class AuthService {
 
   private final AppUserService appUserService;
   private final PasswordEncoder passwordEncoder;
@@ -77,10 +77,8 @@ public class ApiService {
             .statusCode(OK.value())
             .status(OK)
             .message("Login successful.")
-            .data(of(
-                    "auth", jwToken,
-                    "username", loginRequest.getUsername()
-            ))
+            .username(loginRequest.getUsername())
+            .data(of("auth", jwToken))
             .build();
   }
 }

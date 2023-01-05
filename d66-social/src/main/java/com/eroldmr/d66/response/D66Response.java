@@ -1,7 +1,6 @@
 package com.eroldmr.d66.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class D66Response {
   protected LocalDateTime timestamp;
   protected Integer statusCode;
   protected HttpStatus status;
-  protected String reason;
+  protected String username;
   protected String message;
   protected Map<?, ?> data;
 }

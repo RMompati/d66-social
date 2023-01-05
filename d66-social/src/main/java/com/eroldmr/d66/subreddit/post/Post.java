@@ -7,8 +7,7 @@ import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -20,7 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(builderMethodName = "NewPost")
 @Entity
 public class Post {
   @Id
@@ -28,7 +27,7 @@ public class Post {
   @GeneratedValue(generator = "post_id_seq", strategy = GenerationType.IDENTITY)
   private Long postId;
   @NotBlank(message = "Post Name cannot be empty or Null.")
-  private String post;
+  private String postName;
   @Nullable
   private String url;
   @Nullable
@@ -38,7 +37,7 @@ public class Post {
   @ManyToOne(fetch = LAZY)
   @JoinColumn(name = "userId", referencedColumnName  = "userId")
   private AppUser appUser;
-  private Instant createdDate;
+  private LocalDateTime createdDate;
   @ManyToOne(fetch = LAZY) @JoinColumn(name ="id", referencedColumnName = "id")
   private Subreddit subreddit;
 }

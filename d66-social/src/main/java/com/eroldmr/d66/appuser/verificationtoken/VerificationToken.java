@@ -4,8 +4,6 @@ import com.eroldmr.d66.appuser.AppUser;
 import lombok.*;
 
 import javax.persistence.*;
-
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 import static javax.persistence.FetchType.LAZY;

@@ -1,4 +1,4 @@
-package com.eroldmr.d66.api;
+package com.eroldmr.d66.auth;
 
 import com.eroldmr.d66.appuser.dto.LoginRequest;
 import com.eroldmr.d66.appuser.dto.RegisterRequest;
@@ -16,13 +16,13 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-public class ApiController {
+public class AuthController {
 
-  private final ApiService apiService;
+  private final AuthService authService;
 
   @PostMapping("/signup")
   public ResponseEntity<D66Response> registerUser(@RequestBody RegisterRequest registerRequest) {
-    apiService.registerUser(registerRequest);
+    authService.registerUser(registerRequest);
     return ResponseEntity.ok(
         D66Response
                 .respond()
@@ -35,7 +35,7 @@ public class ApiController {
 
   @GetMapping(value = "activate-account/{token}")
   public ResponseEntity<D66Response> activateAccount(@PathVariable String token) {
-    apiService.activateUserAccount(token);
+    authService.activateUserAccount(token);
 
     return ResponseEntity.ok(
         D66Response
@@ -49,6 +49,6 @@ public class ApiController {
 
   @PostMapping("/login")
   public ResponseEntity<D66Response> login(@RequestBody LoginRequest loginRequest) {
-    return ResponseEntity.ok(apiService.login(loginRequest));
+    return ResponseEntity.ok(authService.login(loginRequest));
   }
 }

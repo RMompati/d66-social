@@ -8,7 +8,6 @@ import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.messaging.email.MailContentBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

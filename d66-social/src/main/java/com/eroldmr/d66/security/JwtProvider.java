@@ -2,7 +2,9 @@ package com.eroldmr.d66.security;
 
 import com.eroldmr.d66.appuser.AppUser;
 import com.eroldmr.d66.exception.D66SocialException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
