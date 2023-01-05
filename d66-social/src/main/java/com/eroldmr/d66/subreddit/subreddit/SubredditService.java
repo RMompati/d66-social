@@ -2,6 +2,7 @@ package com.eroldmr.d66.subreddit.subreddit;
 
 import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.response.D66Response;
+import com.eroldmr.d66.security.AuthenticatedUserService;
 import com.eroldmr.d66.subreddit.subreddit.dto.SubredditDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ import static org.springframework.http.HttpStatus.*;
 public class SubredditService {
 
   private final SubredditRepository subredditRepository;
+  private final AuthenticatedUserService authenticatedUserService;
 
   @Transactional
   public D66Response save(SubredditDto subredditDto) {
@@ -35,6 +37,7 @@ public class SubredditService {
             .statusCode(CREATED.value())
             .status(CREATED)
             .message("Subreddit created successfully.")
+            .username(authenticatedUserService.getUsername())
             .data(of(
                     "subreddit",
                     mapToDto(subredditRepository.save(mapDtoToSubreddit(subredditDto)))))
@@ -78,10 +81,11 @@ public class SubredditService {
   private Subreddit mapDtoToSubreddit(SubredditDto subredditDto) {
     return Subreddit
             .NewSubreddit()
+            .createdOn(now())
+            .posts(emptyList())
             .name(subredditDto.getName())
             .description(subredditDto.getDescription())
-            .posts(emptyList())
-            .createdOn(now())
+            .appUser(authenticatedUserService.getAuthenticatedPrincipal())
             .build();
   }
 
