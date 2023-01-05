@@ -73,6 +73,7 @@ public class ApiService {
 
     return D66Response
             .respond()
+            .timestamp(now())
             .statusCode(OK.value())
             .status(OK)
             .message("Login successful.")
