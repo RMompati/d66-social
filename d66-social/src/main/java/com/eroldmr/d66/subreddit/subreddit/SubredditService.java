@@ -7,8 +7,8 @@ import com.eroldmr.d66.subreddit.subreddit.dto.SubredditDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;

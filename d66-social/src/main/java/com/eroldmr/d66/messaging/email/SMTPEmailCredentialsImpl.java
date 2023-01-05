@@ -14,7 +14,7 @@ public class SMTPEmailCredentialsImpl implements SMTPEmailCredentials {
 
   @Override
   public String password() {
-    return "mpzhlyizcownotme";
+    return "dgfvpunxxcjfuxyg";
   }
 
   @Override
