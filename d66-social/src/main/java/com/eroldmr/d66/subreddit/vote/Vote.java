@@ -17,7 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(builderMethodName = "NewVote")
 @Entity
 public class Vote {
   @Id
