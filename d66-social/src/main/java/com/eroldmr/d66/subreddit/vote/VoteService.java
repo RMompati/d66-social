@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.eroldmr.d66.constant.VoteType.UP_VOTE;
+import static com.eroldmr.d66.subreddit.vote.mapper.VoteMapper.mapToDto;
+import static com.eroldmr.d66.subreddit.vote.mapper.VoteMapper.mapToVote;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
@@ -45,7 +47,7 @@ public class VoteService {
       oldVote.get().setVoteType(voteDto.getVoteType());
       voteRepository.save(oldVote.get());
     } else {
-      oldVote = Optional.of(voteRepository.save(toVote(voteDto, post, appUser)));
+      oldVote = Optional.of(voteRepository.save(mapToVote(voteDto, post, appUser)));
     }
     return D66Response
         .respond()
@@ -53,26 +55,7 @@ public class VoteService {
         .statusCode(CREATED.value())
         .status(CREATED)
         .message("Vote saved.")
-        .data(of("vote", toDto(oldVote.get())))
-        .build();
-  }
-
-  private Vote toVote(VoteDto voteDto, Post post, AppUser appUser) {
-    return Vote
-        .NewVote()
-        .post(post)
-        .appUser(appUser)
-        .voteType(voteDto.getVoteType())
-        .build();
-  }
-
-  private VoteDto toDto(Vote vote) {
-    return VoteDto
-        .NewDto()
-        .voteId(vote.getVoteId())
-        .voteType(vote.getVoteType())
-        .postId(vote.getPost().getPostId())
-        .username(vote.getAppUser().getUsername())
+        .data(of("vote", mapToDto(oldVote.get())))
         .build();
   }
 }

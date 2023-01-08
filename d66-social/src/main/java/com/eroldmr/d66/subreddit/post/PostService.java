@@ -6,6 +6,7 @@ import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.response.D66Response;
 import com.eroldmr.d66.security.AuthenticatedUserService;
 import com.eroldmr.d66.subreddit.post.dto.PostDto;
+import com.eroldmr.d66.subreddit.post.mapper.PostMapper;
 import com.eroldmr.d66.subreddit.subreddit.Subreddit;
 import com.eroldmr.d66.subreddit.subreddit.SubredditRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.eroldmr.d66.subreddit.post.mapper.PostMapper.mapToDto;
+import static com.eroldmr.d66.subreddit.post.mapper.PostMapper.mapToPost;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
@@ -36,10 +39,17 @@ public class PostService {
 
   @Transactional
   public D66Response save(PostDto postDto) {
-    Post post = postRepository.save(mapToPost(postDto));
+    Subreddit subreddit = subredditRepository.findByName(postDto.getSubredditName())
+        .orElseThrow(
+            () -> new D66SocialException(format(
+                "Subreddit with name '%s' does not exist.", postDto.getSubredditName()))
+        );
+
+    Post post = postRepository.save(mapToPost(postDto, subreddit, authenticatedUserService.getAuthenticatedPrincipal()));
     post.getSubreddit().getPosts().add(post);
     subredditRepository.save(post.getSubreddit());
 
+    PostDto savedPostDto = mapToDto(post);
     return D66Response
             .respond()
             .timestamp(now())
@@ -47,7 +57,7 @@ public class PostService {
             .status(CREATED)
             .message(format("Post created under subreddit '%s'", postDto.getSubredditName()))
             .username(authenticatedUserService.getUsername())
-            .data(of("post", mapToDto(post)))
+            .data(of("post", savedPostDto))
             .build();
   }
 
@@ -64,7 +74,7 @@ public class PostService {
                     postRepository
                             .findAll()
                             .stream()
-                            .map(this::mapToDto)
+                            .map(PostMapper::mapToDto)
                             .collect(Collectors.toList())
             ))
             .build();
@@ -102,7 +112,7 @@ public class PostService {
             .status(OK)
             .message("Posts fetched by subreddit.")
             .username(authenticatedUserService.getUsername())
-            .data(of("posts", posts.stream().map(this::mapToDto).collect(Collectors.toList())))
+            .data(of("posts", posts.stream().map(PostMapper::mapToDto).collect(Collectors.toList())))
             .build();
   }
 
@@ -120,37 +130,7 @@ public class PostService {
             .status(OK)
             .message("Posts fetched by username.")
             .username(authenticatedUserService.getUsername())
-            .data(of("posts", posts.stream().map(this::mapToDto).collect(Collectors.toList())))
-            .build();
-  }
-
-  @Transactional
-  private Post mapToPost(PostDto postDto) {
-    Subreddit subreddit = subredditRepository.findByName(postDto.getSubredditName())
-            .orElseThrow(
-                    () -> new D66SocialException(format(
-                            "Subreddit with name '%s' does not exist.", postDto.getSubredditName()))
-            );
-
-    return Post
-            .NewPost()
-            .subreddit(subreddit)
-            .url(postDto.getUrl())
-            .postName(postDto.getPostName())
-            .description(postDto.getDescription())
-            .appUser(authenticatedUserService.getAuthenticatedPrincipal())
-            .build();
-  }
-
-  private PostDto mapToDto(Post post) {
-    return PostDto
-            .NewDto()
-            .url(post.getUrl())
-            .postId(post.getPostId())
-            .postName(post.getPostName())
-            .description(post.getDescription())
-            .username(post.getAppUser().getUsername())
-            .subredditName(post.getSubreddit().getName())
+            .data(of("posts", posts.stream().map(PostMapper::mapToDto).collect(Collectors.toList())))
             .build();
   }
 }

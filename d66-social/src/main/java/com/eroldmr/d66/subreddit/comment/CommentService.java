@@ -6,6 +6,7 @@ import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.response.D66Response;
 import com.eroldmr.d66.security.AuthenticatedUserService;
 import com.eroldmr.d66.subreddit.comment.dto.CommentDto;
+import com.eroldmr.d66.subreddit.comment.mapper.CommentMapper;
 import com.eroldmr.d66.subreddit.post.Post;
 import com.eroldmr.d66.subreddit.post.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.eroldmr.d66.subreddit.comment.mapper.CommentMapper.mapToComment;
+import static com.eroldmr.d66.subreddit.comment.mapper.CommentMapper.mapToDto;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
@@ -37,6 +40,10 @@ public class CommentService {
 
   @Transactional
   public D66Response save(CommentDto commentDto) {
+    Post post = postRepository.findById(commentDto.getPostId())
+        .orElseThrow(() -> new D66SocialException(format("Post with id (%d) not found.", commentDto.getPostId())));
+    Comment comment = mapToComment(commentDto, post, authenticatedUserService.getAuthenticatedPrincipal());
+    
     return D66Response
             .respond()
             .timestamp(now())
@@ -44,7 +51,7 @@ public class CommentService {
             .status(CREATED)
             .username(commentDto.getUsername())
             .message("Comment saved.")
-            .data(of("comment", mapToDto(commentRepository.save(mapToComment(commentDto)))))
+            .data(of("comment", mapToDto(commentRepository.save(comment))))
             .build();
   }
 
@@ -60,7 +67,7 @@ public class CommentService {
             .statusCode(OK.value())
             .status(OK)
             .message("Post's comments fetched.")
-            .data(of("comments", comments.stream().map(this::mapToDto).collect(Collectors.toList())))
+            .data(of("comments", comments.stream().map(CommentMapper::mapToDto).collect(Collectors.toList())))
             .build();
   }
 
@@ -76,29 +83,7 @@ public class CommentService {
             .statusCode(OK.value())
             .status(OK)
             .message("User's comments fetched.")
-            .data(of("comments", comments.stream().map(this::mapToDto).collect(Collectors.toList())))
-            .build();
-  }
-
-  @Transactional
-  private Comment mapToComment(CommentDto commentDto) {
-    Post post = postRepository.findById(commentDto.getPostId())
-            .orElseThrow(() -> new D66SocialException(format("Post with id (%d) not found.", commentDto.getPostId())));
-    return Comment
-            .NewComment()
-            .text(commentDto.getText())
-            .appUser(authenticatedUserService.getAuthenticatedPrincipal())
-            .post(post)
-            .build();
-  }
-
-  private CommentDto mapToDto(Comment comment) {
-    return CommentDto
-            .NewDto()
-            .id(comment.getId())
-            .text(comment.getText())
-            .postId(comment.getPost().getPostId())
-            .username(comment.getAppUser().getUsername())
+            .data(of("comments", comments.stream().map(CommentMapper::mapToDto).collect(Collectors.toList())))
             .build();
   }
 }

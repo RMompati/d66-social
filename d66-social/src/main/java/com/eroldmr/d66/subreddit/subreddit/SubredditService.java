@@ -4,6 +4,7 @@ import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.response.D66Response;
 import com.eroldmr.d66.security.AuthenticatedUserService;
 import com.eroldmr.d66.subreddit.subreddit.dto.SubredditDto;
+import com.eroldmr.d66.subreddit.subreddit.mapper.SubredditMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 
+import static com.eroldmr.d66.subreddit.subreddit.mapper.SubredditMapper.mapDtoToSubreddit;
+import static com.eroldmr.d66.subreddit.subreddit.mapper.SubredditMapper.mapToDto;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
-import static java.util.Collections.emptyList;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.*;
 
@@ -40,7 +42,10 @@ public class SubredditService {
             .username(authenticatedUserService.getUsername())
             .data(of(
                     "subreddit",
-                    mapToDto(subredditRepository.save(mapDtoToSubreddit(subredditDto)))))
+                    mapToDto(
+                        subredditRepository.save(
+                            mapDtoToSubreddit(subredditDto, authenticatedUserService.getAuthenticatedPrincipal()))
+                    )))
             .build();
   }
 
@@ -57,7 +62,7 @@ public class SubredditService {
                     subredditRepository
                             .findAll()
                             .stream()
-                            .map(this::mapToDto)
+                            .map(SubredditMapper::mapToDto)
                             .collect(Collectors.toList())
             ))
             .build();
@@ -75,27 +80,6 @@ public class SubredditService {
             .status(OK)
             .message("Subreddit fetched.")
             .data(of("subreddit", mapToDto(subreddit)))
-            .build();
-  }
-
-  private Subreddit mapDtoToSubreddit(SubredditDto subredditDto) {
-    return Subreddit
-            .NewSubreddit()
-            .createdOn(now())
-            .posts(emptyList())
-            .name(subredditDto.getName())
-            .description(subredditDto.getDescription())
-            .appUser(authenticatedUserService.getAuthenticatedPrincipal())
-            .build();
-  }
-
-  private SubredditDto mapToDto(Subreddit subreddit) {
-    return SubredditDto
-            .NewDto()
-              .id(subreddit.getId())
-              .name(subreddit.getName())
-              .description(subreddit.getDescription())
-              .numberOfPosts(subreddit.getPosts().size())
             .build();
   }
 }
