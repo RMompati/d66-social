@@ -41,13 +41,14 @@ public class AuthService {
     appUserService.registerUser(
             AppUser
                     .NewUser()
-                      .firstName(registerRequest.getFirstName())
-                      .lastName(registerRequest.getLastName())
-                      .email(registerRequest.getEmail())
-                      .password(passwordEncoder.encode(registerRequest.getPassword()))
-                      .createdAt(now())
-                      .enabled(false)
-                      .locked(false)
+                    .locked(false)
+                    .enabled(false)
+                    .createdAt(now())
+                    .email(registerRequest.getEmail())
+                    .lastName(registerRequest.getLastName())
+                    .username(registerRequest.getUsername())
+                    .firstName(registerRequest.getFirstName())
+                    .password(passwordEncoder.encode(registerRequest.getPassword()))
                     .build()
     );
   }
