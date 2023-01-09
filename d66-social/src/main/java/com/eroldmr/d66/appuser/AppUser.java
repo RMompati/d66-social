@@ -18,6 +18,10 @@ import java.util.Set;
  */
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @Builder(builderMethodName = "NewUser")
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "unique_username", columnNames = "username"),
+        @UniqueConstraint(name = "unique_email", columnNames = "email"),
+})
 public class AppUser implements UserDetails {
   @Id
   @SequenceGenerator(name = "user_id_seq", sequenceName = "user_id_seq", allocationSize = 1)
@@ -29,6 +33,8 @@ public class AppUser implements UserDetails {
   private String lastName;
   @NotBlank(message = "Password is required.")
   private String password;
+  @NotBlank(message = "Username is required.")
+  private String username;
   @Email
   @NotBlank(message = "Email is required.")
   private String email;
@@ -43,7 +49,7 @@ public class AppUser implements UserDetails {
 
   @Override
   public String getUsername() {
-    return email;
+    return username;
   }
 
   @Override
