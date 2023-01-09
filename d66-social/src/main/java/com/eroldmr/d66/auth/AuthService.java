@@ -4,6 +4,10 @@ import com.eroldmr.d66.appuser.AppUser;
 import com.eroldmr.d66.appuser.AppUserService;
 import com.eroldmr.d66.appuser.dto.LoginRequest;
 import com.eroldmr.d66.appuser.dto.RegisterRequest;
+import com.eroldmr.d66.refreshtoken.RefreshToken;
+import com.eroldmr.d66.refreshtoken.RefreshTokenRepository;
+import com.eroldmr.d66.refreshtoken.RefreshTokenService;
+import com.eroldmr.d66.refreshtoken.dto.RefreshTokenDto;
 import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.response.D66Response;
 import com.eroldmr.d66.security.JwtProvider;
@@ -16,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
@@ -35,6 +41,9 @@ public class AuthService {
   private final AuthenticationManager authenticationManager;
 
   private final JwtProvider jwtProvider;
+
+  private final RefreshTokenService refreshTokenService;
+  private final RefreshTokenRepository refreshTokenRepository;
 
   @Transactional
   public void registerUser(RegisterRequest registerRequest) {
@@ -71,6 +80,7 @@ public class AuthService {
 
     SecurityContextHolder.getContext().setAuthentication(authenticate);
     String jwToken = jwtProvider.generateJWToken(authenticate);
+    Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
 
     return D66Response
             .respond()
@@ -79,7 +89,46 @@ public class AuthService {
             .status(OK)
             .message("Login successful.")
             .username(loginRequest.getUsername())
-            .data(of("auth", jwToken))
+            .data(of(
+                    "authenticationToken", jwToken,
+                    "refreshToken", refreshTokenService.generateRefreshToken().getToken(),
+                    "expiresAt", expiresAt
+            ))
+            .build();
+  }
+
+  public D66Response refreshToken(RefreshTokenDto refreshTokenDto) {
+    refreshTokenService.validateToken(refreshTokenDto.getRefreshToken());
+    String jwToken = jwtProvider.generateTokenWithUsername(refreshTokenDto.getUsername());
+    Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+
+    return D66Response
+            .respond()
+            .timestamp(now())
+            .statusCode(OK.value())
+            .status(OK)
+            .message("Auth token refresh.")
+            .username(refreshTokenDto.getUsername())
+            .data(of(
+                    "authenticationToken", jwToken,
+                    "refreshToken", refreshTokenDto.getRefreshToken(),
+                    "expiresAt", expiresAt
+            ))
+            .build();
+  }
+
+  @Transactional
+  public D66Response logout(RefreshTokenDto refreshTokenDto) {
+
+    RefreshToken refreshToken = refreshTokenService.validateToken(refreshTokenDto.getRefreshToken());
+    refreshTokenRepository.deleteByToken(refreshToken.getToken());
+
+    return D66Response
+            .respond()
+            .timestamp(now())
+            .statusCode(OK.value())
+            .status(OK)
+            .message("You've been logged out.")
             .build();
   }
 }

@@ -2,10 +2,13 @@ package com.eroldmr.d66.auth;
 
 import com.eroldmr.d66.appuser.dto.LoginRequest;
 import com.eroldmr.d66.appuser.dto.RegisterRequest;
+import com.eroldmr.d66.refreshtoken.dto.RefreshTokenDto;
 import com.eroldmr.d66.response.D66Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -50,5 +53,15 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<D66Response> login(@RequestBody LoginRequest loginRequest) {
     return ResponseEntity.ok(authService.login(loginRequest));
+  }
+
+  @PostMapping("/logout")
+  public ResponseEntity<D66Response> logout(@Valid @RequestBody RefreshTokenDto refreshTokenDto) {
+    return ResponseEntity.ok(authService.logout(refreshTokenDto));
+  }
+
+  @PostMapping("refresh/token")
+  public ResponseEntity<D66Response> refresh(@Valid @RequestBody RefreshTokenDto refreshTokenDto) {
+    return ResponseEntity.ok(authService.refreshToken(refreshTokenDto));
   }
 }

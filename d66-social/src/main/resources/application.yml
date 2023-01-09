@@ -21,7 +21,6 @@ spring:
 server:
   error:
     include-message: ALWAYS
-
 jwt:
   expiration:
     time: 900000
