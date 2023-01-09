@@ -73,7 +73,7 @@ public class CommentService {
 
   @Transactional(readOnly = true)
   public D66Response getAllCommentsByUsername(String username) {
-    AppUser appUser = appUserRepository.findAppUserByEmail(username)
+    AppUser appUser = appUserRepository.findByUsername(username)
             .orElseThrow(() -> new D66SocialException(format("User with username '%s' not found.", username)));
 
     List<Comment> comments = commentRepository.findAllByAppUser(appUser);

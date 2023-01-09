@@ -118,7 +118,7 @@ public class PostService {
 
   @Transactional(readOnly = true)
   public D66Response getAllPostsBySubreddit(String username) {
-    AppUser appUser = appUserRepository.findAppUserByEmail(username)
+    AppUser appUser = appUserRepository.findByUsername(username)
             .orElseThrow(() -> new D66SocialException(format("User with username '%s' not found.", username)));
 
     List<Post> posts = postRepository.findAllByAppUser(appUser);

@@ -38,9 +38,9 @@ public class AppUserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return appUserRepository.findAppUserByEmail(username)
+    return appUserRepository.findByUsername(username)
             .orElseThrow(() -> new UsernameNotFoundException(
-                    format("User with email %s not found.", username)
+                    format("User with username %s not found.", username)
             ));
   }
 
@@ -107,7 +107,7 @@ public class AppUserService implements UserDetailsService {
 
   private void userExists(AppUser appUser) {
     log.info("Checking if the user details exists.");
-    Optional<AppUser> user = appUserRepository.findAppUserByEmail(appUser.getEmail());
+    Optional<AppUser> user = appUserRepository.findByUsername(appUser.getEmail());
     boolean exists = user.isPresent();
     boolean enabled = exists && user.get().getEnabled();
 

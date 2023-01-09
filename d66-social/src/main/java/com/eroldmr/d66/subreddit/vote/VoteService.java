@@ -6,16 +6,13 @@ import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.response.D66Response;
 import com.eroldmr.d66.subreddit.post.Post;
 import com.eroldmr.d66.subreddit.post.PostRepository;
-import com.eroldmr.d66.subreddit.post.dto.PostDto;
 import com.eroldmr.d66.subreddit.vote.dto.VoteDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.eroldmr.d66.constant.VoteType.UP_VOTE;
 import static com.eroldmr.d66.subreddit.vote.mapper.VoteMapper.mapToDto;
 import static com.eroldmr.d66.subreddit.vote.mapper.VoteMapper.mapToVote;
 import static java.lang.String.format;
@@ -37,7 +34,7 @@ public class VoteService {
 
   @Transactional
   public D66Response save(VoteDto voteDto) {
-    AppUser appUser = appUserRepository.findAppUserByEmail(voteDto.getUsername())
+    AppUser appUser = appUserRepository.findByUsername(voteDto.getUsername())
         .orElseThrow(() -> new D66SocialException(format("User with username '%s' not found.", voteDto.getUsername())));
     Post post = postRepository.findById(voteDto.getPostId())
         .orElseThrow(() -> new D66SocialException(format("Post with id (%d) not found.", voteDto.getPostId())));
