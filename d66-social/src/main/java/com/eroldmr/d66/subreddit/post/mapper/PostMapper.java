@@ -10,11 +10,8 @@ import com.github.marlonlom.utilities.timeago.TimeAgo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 
-import static java.time.Instant.from;
 import static java.time.LocalDateTime.now;
 
 /**
