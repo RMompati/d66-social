@@ -25,7 +25,6 @@ public class VoteMapper {
         .voteId(vote.getVoteId())
         .voteType(vote.getVoteType())
         .postId(vote.getPost().getPostId())
-        .username(vote.getAppUser().getUsername())
         .build();
   }
 }

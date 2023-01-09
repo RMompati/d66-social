@@ -76,6 +76,7 @@ public class SecurityConfig {
   @Bean
   public AuthenticationEntryPoint authenticationEntryPoint() {
     return (request, response, authException) -> {
+      response.setContentType("application/json");
       response.setStatus(UNAUTHORIZED.value());
       D66Response response1 = D66Response
               .respond()
@@ -86,13 +87,8 @@ public class SecurityConfig {
 
       ObjectMapper objectMapper = new ObjectMapper();
 
-      response
-              .getOutputStream()
-              .println(
-                      objectMapper
-                              .writer(new DefaultPrettyPrinter())
-                              .writeValueAsString(response1)
-              );
+      response.getWriter().println(objectMapper.writer(new DefaultPrettyPrinter()).writeValueAsString(response1));
+
     };
   }
 }

@@ -18,5 +18,4 @@ public class VoteDto {
   private Long voteId;
   private VoteType voteType;
   private Long postId;
-  private String username;
 }

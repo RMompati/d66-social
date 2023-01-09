@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.eroldmr.d66.subreddit.post.mapper.PostMapper.mapToDto;
-import static com.eroldmr.d66.subreddit.post.mapper.PostMapper.mapToPost;
 import static java.lang.String.format;
 import static java.time.LocalDateTime.now;
 import static java.util.Map.of;
@@ -36,6 +34,7 @@ public class PostService {
   private final SubredditRepository subredditRepository;
   private final AuthenticatedUserService authenticatedUserService;
   private final AppUserRepository appUserRepository;
+  private final PostMapper postMapper;
 
   @Transactional
   public D66Response save(PostDto postDto) {
@@ -45,11 +44,11 @@ public class PostService {
                 "Subreddit with name '%s' does not exist.", postDto.getSubredditName()))
         );
 
-    Post post = postRepository.save(mapToPost(postDto, subreddit, authenticatedUserService.getAuthenticatedPrincipal()));
+    Post post = postRepository.save(postMapper.mapToPost(postDto, subreddit, authenticatedUserService.getAuthenticatedPrincipal()));
     post.getSubreddit().getPosts().add(post);
     subredditRepository.save(post.getSubreddit());
 
-    PostDto savedPostDto = mapToDto(post);
+    PostDto savedPostDto = postMapper.mapToDto(post);
     return D66Response
             .respond()
             .timestamp(now())
@@ -74,7 +73,7 @@ public class PostService {
                     postRepository
                             .findAll()
                             .stream()
-                            .map(PostMapper::mapToDto)
+                            .map(postMapper::mapToDto)
                             .collect(Collectors.toList())
             ))
             .build();
@@ -93,7 +92,7 @@ public class PostService {
             .status(OK)
             .message("Post fetched by id")
             .username(authenticatedUserService.getUsername())
-            .data(of("post", mapToDto(post)))
+            .data(of("post", postMapper.mapToDto(post)))
             .build();
   }
 
@@ -112,7 +111,7 @@ public class PostService {
             .status(OK)
             .message("Posts fetched by subreddit.")
             .username(authenticatedUserService.getUsername())
-            .data(of("posts", posts.stream().map(PostMapper::mapToDto).collect(Collectors.toList())))
+            .data(of("posts", posts.stream().map(postMapper::mapToDto).collect(Collectors.toList())))
             .build();
   }
 
@@ -130,7 +129,7 @@ public class PostService {
             .status(OK)
             .message("Posts fetched by username.")
             .username(authenticatedUserService.getUsername())
-            .data(of("posts", posts.stream().map(PostMapper::mapToDto).collect(Collectors.toList())))
+            .data(of("posts", posts.stream().map(postMapper::mapToDto).collect(Collectors.toList())))
             .build();
   }
 }
