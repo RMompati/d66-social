@@ -52,6 +52,13 @@ public class SecurityConfig {
             .permitAll()
             .antMatchers(HttpMethod.GET, "/api/subreddit")
             .permitAll()
+            .antMatchers("/v2/api-docs",
+                    "/configuration/ui",
+                    "/swagger-resources/**",
+                    "/swagger-ui/**",
+                    "/webjars/**"
+            )
+            .permitAll()
             .anyRequest()
             .authenticated()
             .and()
