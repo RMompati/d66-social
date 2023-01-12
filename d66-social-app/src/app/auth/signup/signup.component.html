@@ -2,7 +2,7 @@
   <div class="d-flex">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-      <form class="bg-dark text-center" [formGroup]="signupForm">
+      <form class="bg-dark text-center" [formGroup]="signupForm" (ngSubmit)="signup()">
         <div class="card shadow">
           <div class="card-body">
             <h4 class="card-title">Sign Up</h4>
@@ -64,7 +64,7 @@
               </div>
               <div class="col">
                 <div class="form-floating">
-                  <input [formControlName]="'password'" type="text" class="form-control" id="password" name="password" placeholder="***"
+                  <input [formControlName]="'password'" type="password" class="form-control" id="password" name="password" placeholder="***"
                     [ngClass]="fieldClass('password')">
                   <label for="password">Password</label>
                   <div class="invalid-feedback">
