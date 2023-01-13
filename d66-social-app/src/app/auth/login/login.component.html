@@ -1,0 +1,42 @@
+<div class="container-fluid p-2">
+  <div class="d-flex">
+    <div class="col-md-4 m-auto mt-5">
+      <form class="bg-dark text-center" [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="card shadow">
+          <div class="card-body">
+            <h4 class="card-title">Login</h4>
+            <hr width="50%" class="ms-auto me-auto">
+
+            <div *ngIf="isMessage()" class="row mb-3">
+              <div class="alert" [ngClass]="getMessageClass()" role="alert"> {{ getMessage() }}</div>
+            </div>
+            <div class="row mb-3">
+              <div class="form-floating">
+                <input [formControlName]="'username'" type="text" class="form-control" id="username" name="username" placeholder="i.e, John">
+                <label class="ms-2" for="username">Username</label>
+                <div class="invalid-feedback">
+                  Please provide a valid username
+                </div>  
+              </div>
+            </div>
+            <div class="row">
+              <div class="form-floating">
+                <input [formControlName]="'password'" type="password" class="form-control" id="password" name="password" placeholder="***">
+                <label class="ms-2" for="password">Password</label>
+                <div class="invalid-feedback">
+                  Please provide a valid password
+                </div>  
+              </div>
+            </div>
+          </div>
+          <div class="d-grid gap-2 mb-3">
+            <hr width="50%" class="ms-auto me-auto">
+            <button class="btn btn-outline-primary w-75 me-auto ms-auto" [disabled]="loginForm.invalid">Login</button>
+
+            <span class="text-muted">Don't have an account? <a class="btn btn-outline-secondary" routerLink="/signup">Sign Up</a></span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
