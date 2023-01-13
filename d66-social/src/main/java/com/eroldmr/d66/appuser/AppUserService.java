@@ -55,7 +55,7 @@ public class AppUserService implements UserDetailsService {
     log.info("Generating user verification token.");
 
     String token = generateVerificationToken(appUser);
-    String link = String.format("http://localhost:8080/api/auth/activate-account/%s", token);
+    String link = String.format("http://localhost:4200/activate/%s", token);
 
     smtpEmailService.sendEmail(
             SMTPEmailInfo

@@ -22,6 +22,7 @@ public class VerificationToken {
   private Long id;
   private String token;
   @ManyToOne(fetch = LAZY)
+  @JoinColumn(name = "userId", referencedColumnName = "userId")
   private AppUser appUser;
   private LocalDateTime expiresAt;
 }
