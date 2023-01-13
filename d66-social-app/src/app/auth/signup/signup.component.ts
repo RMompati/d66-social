@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { matchValidator } from 'src/app/validators/form-validators';
 import { AuthService } from '../shared/auth.service';
 import { SignupRequestPayload, emptyPayload } from './singup.request.payload';
@@ -14,7 +15,7 @@ export class SignupComponent implements OnInit {
   signupRequestPayload: SignupRequestPayload;
   signupForm!: FormGroup;
 
-  constructor(private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService) {
     this.signupRequestPayload = emptyPayload;
   }
 
@@ -41,6 +42,9 @@ export class SignupComponent implements OnInit {
       .subscribe( data => {
         console.log(data);
       });
+
+      this.router.navigate(['/success']);
+
   }
 
   getFieldValue(fieldName: string): string {
