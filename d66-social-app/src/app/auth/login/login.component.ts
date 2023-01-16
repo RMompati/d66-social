@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FlashMessageService } from 'src/app/message/flash-message.service';
+import { D66Response } from '../response.payload';
 import { AuthService } from '../shared/auth.service';
 import { emptyPayload, LoginRequestPayload } from './login.request.payload';
 
@@ -30,8 +31,8 @@ export class LoginComponent implements OnInit {
     this.loginRequestPayload.password = this.getFieldValue('password');
 
     this.authService.login(this.loginRequestPayload)
-      .subscribe(data => {
-        console.log(data);        
+      .subscribe((data: D66Response) => {
+        console.log(data);
       });
   }
 
