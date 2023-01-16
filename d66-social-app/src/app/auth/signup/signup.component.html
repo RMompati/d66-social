@@ -1,12 +1,16 @@
 <div class="container-fluid p-2">
   <div class="d-flex">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
+    <div class="col-md-6 m-auto">
       <form class="bg-dark text-center" [formGroup]="signupForm" (ngSubmit)="signup()">
-        <div class="card shadow">
+        <div class="card shadow dirty-white">
           <div class="card-body">
             <h4 class="card-title">Sign Up</h4>
             <hr width="50%" class="ms-auto me-auto">
+
+            <div *ngIf="isMessage()" class="row mb-3">
+              <pre class="alert" [ngClass]="getMessageClass()" role="alert">{{ getMessage() }}</pre>
+            </div>
+            
             <div class="row">
               <div class="col">
                 <div class="form-floating mb-3">
@@ -83,6 +87,5 @@
         </div>
       </form>
     </div>
-    <div class="col-md-3"></div>
   </div>
 </div>

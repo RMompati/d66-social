@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { FlashMessageService } from 'src/app/message/flash-message.service';
 import { matchValidator } from 'src/app/validators/form-validators';
+import { D66Response } from '../response.payload';
 import { AuthService } from '../shared/auth.service';
 import { SignupRequestPayload, emptyPayload } from './singup.request.payload';
 
@@ -10,13 +12,17 @@ import { SignupRequestPayload, emptyPayload } from './singup.request.payload';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
 
   signupRequestPayload: SignupRequestPayload;
   signupForm!: FormGroup;
 
-  constructor(private router: Router, private authService: AuthService) {
+  constructor(private router: Router, private authService: AuthService,
+    private flashMessageService: FlashMessageService) {
     this.signupRequestPayload = emptyPayload;
+  }
+  ngOnDestroy(): void {
+    this.flashMessageService.reset();
   }
 
   ngOnInit(): void {
@@ -38,13 +44,21 @@ export class SignupComponent implements OnInit {
     this.signupRequestPayload.username = this.getFieldValue('username');
     this.signupRequestPayload.password = this.getFieldValue('password');
 
-    this.authService.signup(this.signupRequestPayload)
-      .subscribe( data => {
+    const singupObserver = {
+      next: (data: D66Response) => {
         console.log(data);
-      });
+        this.router.navigate(['/success']); 
+      },
+      error: (response: any) => {
+        console.log("An error occured!");
+        this.flashMessageService.setMessageType(response.error.statusCode)
+        this.flashMessageService.setMessage(response.error.message)
+        console.log(response);
+      }
+    };
 
-      this.router.navigate(['/success']);
-
+    this.authService.signup(this.signupRequestPayload)
+      .subscribe(singupObserver);
   }
 
   getFieldValue(fieldName: string): string {
@@ -76,5 +90,19 @@ export class SignupComponent implements OnInit {
 
   fieldHasError(field: string): boolean {
     return  this.getField(field).hasError('mismatch');
+  }
+
+  isMessage(): boolean {
+    return this.flashMessageService.getMessage() !== undefined;
+  }
+
+  getMessage(): string {
+    return this.flashMessageService.getMessage();
+  }
+
+  getMessageClass() {
+    const status = this.flashMessageService.getMessageType();
+    return status === 200 ? 'alert-success p-1' :
+            status >= 400 ? 'alert-danger p-1' : 'alert-info p-1';
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FlashMessageService } from 'src/app/message/flash-message.service';
 import { D66Response } from '../response.payload';
@@ -10,7 +10,7 @@ import { emptyPayload, LoginRequestPayload } from './login.request.payload';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   
   loginRequestPayload: LoginRequestPayload;
   loginForm!: FormGroup;
@@ -25,6 +25,10 @@ export class LoginComponent implements OnInit {
       password: new FormControl('', Validators.required)
     });
   }
+  
+  ngOnDestroy(): void {    
+      this.flashMessageService.reset();
+  }
 
   login() {
     this.loginRequestPayload.username = this.getFieldValue('username');
@@ -32,7 +36,12 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginRequestPayload)
       .subscribe((data: D66Response) => {
-        console.log(data);
+        
+        if (data.statusCode >= 401) {
+          this.flashMessageService.setMessage(data.message);
+          this.flashMessageService.setMessageType(data.statusCode);
+          this.loginForm.reset();
+        }
       });
   }
 
@@ -46,8 +55,8 @@ export class LoginComponent implements OnInit {
 
   getMessageClass() {
     const status = this.flashMessageService.getMessageType();
-    return status === 200 ? 'alert-success' :
-            status >= 400 ? 'alert-danger' : 'alert-info';
+    return status === 200 ? 'alert-success p-1' :
+            status >= 400 ? 'alert-danger p-1' : 'alert-info p-1';
   }
 
   getFieldValue(fieldName: string) {

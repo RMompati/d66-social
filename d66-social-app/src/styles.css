@@ -4,6 +4,6 @@ body{
   text-align: center;
 }
 
-dirty-white {
-  background-color: #E8E4C9;
+.dirty-white {
+  background-color: #E8E4C9 !important;
 }

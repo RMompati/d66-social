@@ -5,15 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class FlashMessageService {
 
-  private message!: string;
-  private messageType!: number;
+  private message?: string;
+  private messageType?: number;
 
   setMessage(message: string) {
     this.message = message;
   }
 
   getMessage(): string {
-    return this.message;
+    return this.message!;
   }
 
   setMessageType(messageType: number) {
@@ -21,6 +21,11 @@ export class FlashMessageService {
   }
 
   getMessageType(): number {
-    return this.messageType;
+    return this.messageType!;
+  }
+
+  reset() {
+    this.message = undefined;
+    this.messageType = undefined;
   }
 }
