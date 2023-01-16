@@ -10,6 +10,7 @@ import com.eroldmr.d66.refreshtoken.RefreshTokenService;
 import com.eroldmr.d66.refreshtoken.dto.RefreshTokenDto;
 import com.eroldmr.d66.exception.D66SocialException;
 import com.eroldmr.d66.response.D66Response;
+import com.eroldmr.d66.response.LoginResponse;
 import com.eroldmr.d66.security.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -75,7 +76,7 @@ public class AuthService {
               new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
       );
     } catch (AuthenticationException exc) {
-      throw new D66SocialException("User authentication failed.", UNAUTHORIZED);
+      throw new D66SocialException("Invalid username or password.", UNAUTHORIZED);
     }
 
     SecurityContextHolder.getContext().setAuthentication(authenticate);
@@ -90,9 +91,14 @@ public class AuthService {
             .message("Login successful.")
             .username(loginRequest.getUsername())
             .data(of(
-                    "authenticationToken", jwToken,
-                    "refreshToken", refreshTokenService.generateRefreshToken().getToken(),
-                    "expiresAt", expiresAt
+                    "auth",
+                    LoginResponse
+                            .login()
+                            .authenticationToken(jwToken)
+                            .refreshToken(refreshTokenService.generateRefreshToken().getToken())
+                            .expiresAt(expiresAt)
+                            .username(loginRequest.getUsername())
+                            .build()
             ))
             .build();
   }
