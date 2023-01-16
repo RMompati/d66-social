@@ -31,8 +31,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(this.loginRequestPayload)
       .subscribe(data => {
-        console.log(data);
-        
+        console.log(data);        
       });
   }
 
@@ -51,7 +50,25 @@ export class LoginComponent implements OnInit {
   }
 
   getFieldValue(fieldName: string) {
-    return this.loginForm.get(fieldName)!.value;
+    return this.getField(fieldName).value;
+  }
+
+  getField(field: string) {
+    return this.loginForm.get(field)!;
+  }
+
+  isInvalid(field: string): boolean {
+    const thisField = this.getField(field);
+    return !thisField.valid && thisField.touched;
+  }
+
+  isValid(field: string): boolean {
+    const thisField = this.getField(field);
+    return thisField.valid && thisField.touched;
+  }
+
+  fieldClass(field: string): string {
+    return this.isInvalid(field) ? 'is-invalid' : this.isValid(field) ? 'is-valid': '';
   }
 
 }

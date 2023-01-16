@@ -4,7 +4,15 @@ export interface D66Response {
   status: string;
   username?: string;
   message: string;
-  data?: {}
+  data?: {
+    auth?: LoginResponse
+  }
+}
+
+export interface LoginResponse {
+  authenticationToken: string;
+  refreshToken: string;
+  expiresAt: Date;
 }
 
 export const emptyResponse: D66Response = {

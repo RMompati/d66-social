@@ -12,7 +12,8 @@
             </div>
             <div class="row mb-3">
               <div class="form-floating">
-                <input [formControlName]="'username'" type="text" class="form-control" id="username" name="username" placeholder="i.e, John">
+                <input [formControlName]="'username'" type="text" class="form-control" id="username" name="username" placeholder="i.e, John"
+                [ngClass]="fieldClass('username')">
                 <label class="ms-2" for="username">Username</label>
                 <div class="invalid-feedback">
                   Please provide a valid username
@@ -21,10 +22,11 @@
             </div>
             <div class="row">
               <div class="form-floating">
-                <input [formControlName]="'password'" type="password" class="form-control" id="password" name="password" placeholder="***">
+                <input [formControlName]="'password'" type="password" class="form-control" id="password" name="password" placeholder="***"
+                [ngClass]="fieldClass('password')">
                 <label class="ms-2" for="password">Password</label>
                 <div class="invalid-feedback">
-                  Please provide a valid password
+                  Password cannot be empty
                 </div>  
               </div>
             </div>
