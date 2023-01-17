@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static com.eroldmr.d66.subreddit.subreddit.mapper.SubredditMapper.mapDtoToSubreddit;
 import static com.eroldmr.d66.subreddit.subreddit.mapper.SubredditMapper.mapToDto;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
+import static java.time.Instant.now;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.*;
 

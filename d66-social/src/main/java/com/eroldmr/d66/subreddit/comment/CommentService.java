@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static com.eroldmr.d66.subreddit.comment.mapper.CommentMapper.mapToComment;
 import static com.eroldmr.d66.subreddit.comment.mapper.CommentMapper.mapToDto;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
+import static java.time.Instant.now;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;

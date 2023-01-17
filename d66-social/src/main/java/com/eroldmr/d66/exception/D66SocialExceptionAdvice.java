@@ -7,8 +7,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import java.util.Optional;
+
+import static org.springframework.http.HttpStatus.*;
 
 /**
  * @author Mompati 'Patco' Keetile
@@ -19,7 +20,7 @@ public class D66SocialExceptionAdvice {
   @ExceptionHandler(D66SocialException.class)
   public ResponseEntity<D66Response> handleD66Exception(D66SocialException d66SocialException) {
     return ResponseEntity
-            .internalServerError()
+            .status(d66SocialException.getStatus())
             .body(
                     D66Response
                             .respond()
@@ -33,7 +34,7 @@ public class D66SocialExceptionAdvice {
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<D66Response> handleSQLException(DataIntegrityViolationException psqlException) {
     return ResponseEntity
-            .internalServerError()
+            .status(BAD_REQUEST)
             .body (
                     D66Response
                             .respond()
@@ -42,17 +43,5 @@ public class D66SocialExceptionAdvice {
                             .message("User registration failed.\nTry using a different username or email.")
                             .build()
             );
-  }
-
-  @ExceptionHandler(UsernameNotFoundException.class)
-  public ResponseEntity<D66Response> handleUsernameNotFound(UsernameNotFoundException usernameNFE) {
-    return ResponseEntity.ok(
-            D66Response
-                    .respond()
-                    .statusCode(UNAUTHORIZED.value())
-                    .status(UNAUTHORIZED)
-                    .message("Authentication failed.")
-                    .build()
-    );
   }
 }

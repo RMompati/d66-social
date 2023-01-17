@@ -19,7 +19,7 @@ import static com.eroldmr.d66.constant.VoteType.UP_VOTE;
 import static com.eroldmr.d66.subreddit.vote.mapper.VoteMapper.mapToDto;
 import static com.eroldmr.d66.subreddit.vote.mapper.VoteMapper.mapToVote;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
+import static java.time.Instant.now;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.ALREADY_REPORTED;
 import static org.springframework.http.HttpStatus.CREATED;

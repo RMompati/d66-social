@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import org.springframework.http.HttpStatus;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Map;
 
@@ -18,7 +19,7 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @SuperBuilder(builderMethodName = "respond")
 @JsonInclude(NON_NULL)
 public class D66Response {
-  protected LocalDateTime timestamp;
+  protected Instant timestamp;
   protected Integer statusCode;
   protected HttpStatus status;
   protected String username;

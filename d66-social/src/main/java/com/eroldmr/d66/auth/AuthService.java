@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
-import static java.time.LocalDateTime.now;
+import static java.time.Instant.now;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
@@ -81,7 +81,7 @@ public class AuthService {
 
     SecurityContextHolder.getContext().setAuthentication(authenticate);
     String jwToken = jwtProvider.generateJWToken(authenticate);
-    Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+    Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
 
     return D66Response
             .respond()
@@ -106,7 +106,7 @@ public class AuthService {
   public D66Response refreshToken(RefreshTokenDto refreshTokenDto) {
     refreshTokenService.validateToken(refreshTokenDto.getRefreshToken());
     String jwToken = jwtProvider.generateTokenWithUsername(refreshTokenDto.getUsername());
-    Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+    Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
 
     return D66Response
             .respond()
@@ -116,9 +116,14 @@ public class AuthService {
             .message("Auth token refresh.")
             .username(refreshTokenDto.getUsername())
             .data(of(
-                    "authenticationToken", jwToken,
-                    "refreshToken", refreshTokenDto.getRefreshToken(),
-                    "expiresAt", expiresAt
+                    "auth",
+                    LoginResponse
+                            .login()
+                            .authenticationToken(jwToken)
+                            .refreshToken(refreshTokenDto.getRefreshToken())
+                            .expiresAt(expiresAt)
+                            .username(refreshTokenDto.getUsername())
+                            .build()
             ))
             .build();
   }

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
+import static java.time.Instant.now;
 import static java.util.Map.of;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;

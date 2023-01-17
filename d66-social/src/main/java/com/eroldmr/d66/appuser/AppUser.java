@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
@@ -38,7 +39,7 @@ public class AppUser implements UserDetails {
   @Email
   @NotBlank(message = "Email is required.")
   private String email;
-  private LocalDateTime createdAt;
+  private Instant createdAt;
   private Boolean enabled;
   private Boolean locked;
 
