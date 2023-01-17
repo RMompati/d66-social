@@ -3,7 +3,7 @@ import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from
 import { Router } from '@angular/router';
 import { FlashMessageService } from 'src/app/message/flash-message.service';
 import { matchValidator } from 'src/app/validators/form-validators';
-import { D66Response } from '../response.payload';
+import { D66ErrorResponse, D66Response } from '../response.payload';
 import { AuthService } from '../shared/auth.service';
 import { SignupRequestPayload, emptyPayload } from './singup.request.payload';
 
@@ -49,11 +49,9 @@ export class SignupComponent implements OnInit, OnDestroy {
         console.log(data);
         this.router.navigate(['/success']); 
       },
-      error: (response: any) => {
-        console.log("An error occured!");
-        this.flashMessageService.setMessageType(response.error.statusCode)
-        this.flashMessageService.setMessage(response.error.message)
-        console.log(response);
+      error: (data: D66ErrorResponse) => {
+        this.flashMessageService.setMessageType(data.error!.statusCode)
+        this.flashMessageService.setMessage(data.error!.message)
       }
     };
 
