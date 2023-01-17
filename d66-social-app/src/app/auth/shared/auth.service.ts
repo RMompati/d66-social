@@ -36,4 +36,8 @@ export class AuthService {
   activate(token: string) {
     return this.httpClient.get<D66Response>(`${this.apiUrl}/activate-account/${token}`);
   }
+
+  getJwToken(): string {
+    return this.localStorage.retrieve('auththenticationToken');
+  }
 }

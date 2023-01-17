@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { FlashMessageService } from 'src/app/message/flash-message.service';
 import { D66ErrorResponse, D66Response } from '../response.payload';
 import { AuthService } from '../shared/auth.service';
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   loginRequestPayload: LoginRequestPayload;
   loginForm!: FormGroup;
 
-  constructor(private authService: AuthService, private flashMessageService: FlashMessageService) {
+  constructor(private router: Router, private authService: AuthService,
+    private flashMessageService: FlashMessageService) {
     this.loginRequestPayload = emptyPayload;
   }
 
@@ -37,6 +39,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     const loginObserver = {
       next: (data: D66Response) => {
         console.log(data);
+        // navigate to home page.
+        // this.router.navigateByUrl("/")
       },
       error: (data: D66ErrorResponse) => {
         console.log(data);
