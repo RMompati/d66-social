@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FlashMessageService } from 'src/app/message/flash-message.service';
-import { D66Response } from '../response.payload';
+import { D66ErrorResponse, D66Response } from '../response.payload';
 import { AuthService } from '../shared/auth.service';
 import { emptyPayload, LoginRequestPayload } from './login.request.payload';
 
@@ -34,15 +34,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.loginRequestPayload.username = this.getFieldValue('username');
     this.loginRequestPayload.password = this.getFieldValue('password');
 
-    this.authService.login(this.loginRequestPayload)
-      .subscribe((data: D66Response) => {
+    const loginObserver = {
+      next: (data: D66Response) => {
+        console.log(data);
+      },
+      error: (data: D66ErrorResponse) => {
+        console.log(data);
         
-        if (data.statusCode >= 401) {
-          this.flashMessageService.setMessage(data.message);
-          this.flashMessageService.setMessageType(data.statusCode);
-          this.loginForm.reset();
-        }
-      });
+        this.flashMessageService.setMessage(data.error!.message);
+        this.flashMessageService.setMessageType(data.error!.statusCode);
+        this.loginForm.reset();
+      }
+    };
+
+    this.authService.login(this.loginRequestPayload)
+      .subscribe(loginObserver);
   }
 
   isMessage(): boolean {

@@ -9,6 +9,10 @@ export interface D66Response {
   }
 }
 
+export interface D66ErrorResponse {
+  error?: D66Response
+}
+
 export interface LoginResponse {
   authenticationToken: string;
   refreshToken: string;

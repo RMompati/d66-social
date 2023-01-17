@@ -22,6 +22,8 @@ export class AuthService {
   login(loginRequestPayload: LoginRequestPayload): Observable<D66Response> {
     return this.httpClient.post<D66Response>(`${this.apiUrl}/login`, loginRequestPayload)
     .pipe<D66Response>(map<D66Response,D66Response>((data: D66Response) => {
+      console.log(data);
+      
       
       this.localStorage.store('auththenticationToken', data.data!.auth!.authenticationToken)
       this.localStorage.store('refreshToken', data.data!.auth!.refreshToken)
